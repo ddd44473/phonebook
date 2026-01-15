@@ -1,0 +1,18 @@
+# build directories
+build-*/
+build/
+
+# Qt Creator user files
+*.user
+*.user.*
+*.autosave
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# OS / misc
+.DS_Store
+Thumbs.db
