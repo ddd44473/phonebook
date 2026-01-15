@@ -1,9 +1,0 @@
-id:3
-first:Igor
-last:Romanov
-middle:aleksey
-addr:Norgovskaya 44
-birth:2004-11-23
-email:romann@gmailcom
-phone:Work|88124576897
-----
