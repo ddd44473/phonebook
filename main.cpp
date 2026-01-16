@@ -10,11 +10,10 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    // 1) ТЕСТ: какие SQL-драйверы видит Qt
+    //sql drivers
     qDebug() << "Available SQL drivers:" << QSqlDatabase::drivers();
 
-    // 2) ТЕСТ: подключение к PostgreSQL и создание схемы (ensureSchema вызывается внутри loadAll)
-    // ВАЖНО: вставь пароль от phonebook_user вместо "PASTE_PASSWORD_HERE"
+    // 2)connect to sql
     PostgresRepository pg(
         "localhost",
         5432,
@@ -26,7 +25,7 @@ int main(int argc, char *argv[])
     const auto list = pg.loadAll();
     qDebug() << "Loaded from PG:" << (int)list.size();
 
-    // 3) Запуск GUI
+    //gui 
     MainWindow w;
     w.show();
 
