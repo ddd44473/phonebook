@@ -4,16 +4,16 @@
 #include <sstream>   
 
 //static counters
-std::atomic<uint64_t> Contact::created_count{0}; //created contacts count
-std::atomic<uint64_t> Contact::copy_count{0}; //copy contacts count
-std::atomic<uint64_t> Contact::move_count{0}; //move contacts count
+std::atomic<uint64_t> Contact::created_count{0}; // created contacts count
+std::atomic<uint64_t> Contact::copy_count{0}; // copy contacts count
+std::atomic<uint64_t> Contact::move_count{0}; // move contacts count
 
 
 Contact::Contact() {
     ++created_count;
 }
 
-Contact::~Contact() = default; //default destructor
+Contact::~Contact() = default; // default destructor
 
 Contact::Contact(const Contact& other) // copy constructor
     : id(other.id),
