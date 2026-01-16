@@ -21,7 +21,7 @@ PostgresRepository::PostgresRepository(
     , user_(user)
     , password_(password)
 {
-    // ничего не подключаем здесь — подключаемся лениво при вызовах
+    
 }
 
 static QSqlDatabase makeDb(const std::string& host, int port,
@@ -29,7 +29,7 @@ static QSqlDatabase makeDb(const std::string& host, int port,
                           const std::string& user,
                           const std::string& password)
 {
-    // Уникальное имя соединения, чтобы не конфликтовать
+    // unique name 
     const QString connName =
         QString("pg_%1_%2_%3")
             .arg(QString::fromStdString(user))
@@ -92,7 +92,7 @@ void PostgresRepository::ensureSchema() const
         return;
     }
 
-    // индекс для ускорения
+    // index
     q.exec("CREATE INDEX IF NOT EXISTS idx_phones_contact_id ON phones(contact_id);");
 }
 
@@ -119,13 +119,13 @@ std::vector<Contact> PostgresRepository::loadAll() const
         c.middlename = qc.value(3).toString().toStdString();
         c.address    = qc.value(4).toString().toStdString();
 
-        // birthday может быть NULL
+        // birthday can be null
         const QVariant b = qc.value(5);
         c.birthday = b.isNull() ? "" : b.toDate().toString("yyyy-MM-dd").toStdString();
 
         c.email = qc.value(6).toString().toStdString();
 
-        // телефоны
+        // phones
         QSqlQuery qp(db);
         qp.prepare("SELECT type, number FROM phones WHERE contact_id = :cid ORDER BY id;");
         qp.bindValue(":cid", c.id);
@@ -162,14 +162,14 @@ void PostgresRepository::saveAll(const std::vector<Contact>& contacts) const
 
     QSqlQuery q(db);
 
-    // Очистка таблиц (контакты удалятся -> телефоны удалятся каскадом)
+    // clear tables
     if (!q.exec("DELETE FROM contacts;")) {
         qWarning() << "saveAll delete contacts error:" << q.lastError().text();
         db.rollback();
         return;
     }
 
-    // Вставка контактов
+    // write contacts
     QSqlQuery ic(db);
     ic.prepare(
         "INSERT INTO contacts(id, firstname, lastname, middlename, address, birthday, email) "
@@ -189,7 +189,7 @@ void PostgresRepository::saveAll(const std::vector<Contact>& contacts) const
         ic.bindValue(":mn", QString::fromStdString(c.middlename));
         ic.bindValue(":addr", QString::fromStdString(c.address));
 
-        // birthday может быть пустым => NULL
+        // birthday can be null
         if (c.birthday.empty()) {
             ic.bindValue(":bd", QVariant(QVariant::Date));
         } else {
