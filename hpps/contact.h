@@ -6,8 +6,8 @@
 
 enum class PhoneType { Work, Home, Service }; // types of telephones
 
-struct PhoneNumber { //contains phone type + phone number
-    PhoneType type; //(work/home/service)
+struct PhoneNumber { // contains phone type + phone number
+    PhoneType type; // (work/home/service)
     std::string number;
 };
 
@@ -19,7 +19,7 @@ public:
     static std::atomic<uint64_t> move_count; //move constructor
 
     
-    int id = 0; //identifier of the contact(useful for database)
+    int id = 0; // identifier of the contact(useful for database)
 
     //fields
     std::string firstname; //required
@@ -29,10 +29,10 @@ public:
     std::string birthday; //optional
     std::string email; //required
 
-    std::vector<PhoneNumber> phones; //phonenumber
+    std::vector<PhoneNumber> phones; // phonenumber
 
-    Contact(); //default constructor
-    ~Contact(); //destructor
+    Contact(); // default constructor
+    ~Contact(); // destructor
 
     Contact(const Contact& other); //copy constructor
     Contact(Contact&& other) noexcept; //move constructor
