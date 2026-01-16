@@ -1,11 +1,10 @@
 #include <iostream>
-#include <limits>      // std::numeric_limits
+#include <limits>      
 #include <string>
 #include <vector>
 
 #include "../hpps/service.h"
 
-// helper: read whole line
 static void readLine(const std::string& prompt, std::string& out)
 {
     std::cout << prompt;
@@ -50,7 +49,7 @@ int main()
         }
 
         if (choice == 1) {
-            // --- Add contact ---
+            // add contact
             std::string firstname, lastname, middlename;
             std::string address, birthday, email;
             std::string phoneNumber;
@@ -81,7 +80,7 @@ int main()
             else     std::cout << "Contact created.\n";
         }
         else if (choice == 2) {
-            // --- List contacts ---
+            // list contacts
             const auto& all = service.getAll();
             if (all.empty()) {
                 std::cout << "No contacts.\n";
@@ -105,7 +104,7 @@ int main()
             }
         }
         else if (choice == 3) {
-            // --- Delete by id ---
+            // delete by id
             std::cout << "Enter id to delete: ";
             int id;
             if (!(std::cin >> id)) {
@@ -120,7 +119,7 @@ int main()
             else                        std::cout << "Contact with this id not found.\n";
         }
         else if (choice == 4) {
-            // --- Edit by id ---
+            // edit by id
             std::cout << "Enter id to edit: ";
             int id;
             if (!(std::cin >> id)) {
