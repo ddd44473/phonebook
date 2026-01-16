@@ -15,7 +15,7 @@ Contact::Contact() {
 
 Contact::~Contact() = default; //default destructor
 
-Contact::Contact(const Contact& other) //copy constructor
+Contact::Contact(const Contact& other) // copy constructor
     : id(other.id),
       firstname(other.firstname),
       lastname(other.lastname),
@@ -28,7 +28,7 @@ Contact::Contact(const Contact& other) //copy constructor
     ++copy_count;
 }
 
-Contact::Contact(Contact&& other) noexcept //move constructor
+Contact::Contact(Contact&& other) noexcept // move constructor
     : id(other.id),
       firstname(std::move(other.firstname)),
       lastname(std::move(other.lastname)),
@@ -42,7 +42,7 @@ Contact::Contact(Contact&& other) noexcept //move constructor
     other.id = 0;
 }
 
-Contact& Contact::operator=(const Contact& other) { //copy assignment
+Contact& Contact::operator=(const Contact& other) { // copy assignment
     if (this != &other) {
         ++copy_count;
         id         = other.id;
@@ -57,7 +57,7 @@ Contact& Contact::operator=(const Contact& other) { //copy assignment
     return *this;
 }
 
-Contact& Contact::operator=(Contact&& other) noexcept { //move assignment
+Contact& Contact::operator=(Contact&& other) noexcept { // move assignment
     if (this != &other) {
         ++move_count;
         id         = other.id;
@@ -86,7 +86,7 @@ std::string Contact::serialize() const
     ss << "birth:"  << birthday  << '\n';
     ss << "email:"  << email     << '\n';
 
-    // телефоны: phone:Work|+7812...
+    // phones
     for (const auto& p : phones) {
         ss << "phone:";
         switch (p.type) {
@@ -101,7 +101,7 @@ std::string Contact::serialize() const
     return ss.str();
 }
 
-// Вспомогательная функция: перевести строку в PhoneType
+// string into PhoneType
 static PhoneType phoneTypeFromString(const std::string& s)
 {
     if (s == "Work")    return PhoneType::Work;
@@ -109,7 +109,7 @@ static PhoneType phoneTypeFromString(const std::string& s)
     return PhoneType::Service; // по умолчанию
 }
 
-// Разобрать текстовый блок в объект Contact
+
 Contact Contact::deserialize(const std::string& block)
 {
     Contact c;
@@ -144,7 +144,7 @@ Contact Contact::deserialize(const std::string& block)
                 p.type   = phoneTypeFromString(typeStr);
                 p.number = numStr;
             } else {
-                p.type   = PhoneType::Work;  // дефолт
+                p.type   = PhoneType::Work;  // default
                 p.number = val;
             }
             c.phones.push_back(std::move(p));
