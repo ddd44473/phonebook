@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "contact.h"
-#include "repository.h"   // интерфейс IRepository
+#include "repository.h"   // IRepository
 
 // Параметры подключения к PostgreSQL (для Задачи 3)
 struct DbConfig {
@@ -16,17 +16,16 @@ struct DbConfig {
     std::string password;
 };
 
-// Сервисный класс: вся логика работы с контактами.
-// Хранит контакты в памяти и сохраняет их в выбранное хранилище (файл или PostgreSQL).
+
 class ContactService {
 public:
-    // Режим 1: хранилище ФАЙЛ (как в Задаче 2)
+    // file
     explicit ContactService(const std::string& filePath);
 
-    // Режим 2: хранилище PostgreSQL (Задача 3)
+    // database
     explicit ContactService(const DbConfig& cfg);
 
-    // Получить все контакты (для отображения в GUI/CLI).
+    // get all contacts
     const std::vector<Contact>& getAll() const;
 
     bool createContact(
@@ -55,11 +54,11 @@ public:
     );
 
 private:
-    void loadFromStorage(); // загрузить contacts из repo
-    void saveToStorage();   // сохранить contacts в repo
+    void loadFromStorage(); // load contacts from repo
+    void saveToStorage();   // save contacts в repo
 
 private:
-    std::unique_ptr<IRepository> repo; // может быть FileRepository или PostgresRepository
-    std::vector<Contact> contacts;     // контакты в памяти
-    int nextId = 1;                    // следующий id для нового контакта
+    std::unique_ptr<IRepository> repo; // FileRepository or PostgresRepository
+    std::vector<Contact> contacts;     // contacts
+    int nextId = 1;                    // next id
 };
