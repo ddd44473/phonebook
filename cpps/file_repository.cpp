@@ -4,12 +4,12 @@
 #include <QTextStream>
 #include <QString>
 
-// filePath приходит строкой (мы передаём туда путь из AppData)
+// filePath with string
 FileRepository::FileRepository(const std::string& filePath)
     : path(filePath)
 {}
 
-// Чтение всех контактов из файла
+// reading from files
 std::vector<Contact> FileRepository::loadAll() const
 {
     std::vector<Contact> result;
@@ -47,7 +47,7 @@ std::vector<Contact> FileRepository::loadAll() const
     return result;
 }
 
-// Полная перезапись файла списком контактов
+
 void FileRepository::saveAll(const std::vector<Contact>& contacts) const
 {
     QFile file(QString::fromStdString(path));
@@ -59,7 +59,7 @@ void FileRepository::saveAll(const std::vector<Contact>& contacts) const
     out.setCodec("UTF-8");
 
     for (const auto& c : contacts) {
-        // serialize() уже заканчивает блок "----"
+        
         out << QString::fromStdString(c.serialize()) << "\n";
     }
 }

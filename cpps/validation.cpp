@@ -5,7 +5,7 @@
 #include <regex>
 #include <string>
 
-// ---------- helpers ----------
+// helpers
 static std::string trim(const std::string& s)
 {
     size_t start = 0;
@@ -27,7 +27,7 @@ static std::string removeSpaces(const std::string& s)
     return out;
 }
 
-// yyyy-MM-dd -> y,m,d ; return false if format/values invalid
+// yyyy-MM-dd, return false if format/values invalid
 static bool parseIsoDate(const std::string& s, int& y, int& m, int& d)
 {
     if (s.size() != 10) return false;
@@ -78,7 +78,7 @@ static void todayYMD(int& y, int& m, int& d)
     d = lt.tm_mday;
 }
 
-// ---------- validation ----------
+// validation
 bool validateName(const std::string& s)
 {
     const std::string t = trim(s);
@@ -93,7 +93,7 @@ bool validateEmail(const std::string& s)
 {
     const std::string t = normalizeEmail(s);
 
-    // 1) ровно один '@'
+    // must be one @
     const auto at = t.find('@');
     if (at == std::string::npos) return false;
     if (t.find('@', at + 1) != std::string::npos) return false;
@@ -113,8 +113,7 @@ bool validateEmail(const std::string& s)
         return isLatAlnum(c) || c == '.' || c == '_' || c == '-';
     };
 
-    // 2) username: только латиница/цифры и . _ - ,
-    //    не начинать/заканчивать на . _ -
+    // username check
     if (user.front() == '.' || user.front() == '_' || user.front() == '-') return false;
     if (user.back()  == '.' || user.back()  == '_' || user.back()  == '-') return false;
 
@@ -125,14 +124,13 @@ bool validateEmail(const std::string& s)
     }
     if (!hasLetter) return false; // ✅ запрещаем 123@...
 
-    // 3) домен должен быть вида label.label (с точкой), где label = [A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?
-    //    и tld >= 2 букв
+    // email domain check
     static const std::regex domRe(
         R"(^[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)+$)"
     );
     if (!std::regex_match(dom, domRe)) return false;
 
-    // tld: минимум 2 буквы
+    
     const auto lastDot = dom.rfind('.');
     if (lastDot == std::string::npos) return false;
     const std::string tld = dom.substr(lastDot + 1);
@@ -158,7 +156,7 @@ bool validatePhone(const std::string& s)
 {
     const std::string t = trim(s);
 
-    // как было: ^(\+7|8)(812|\(812\))(\d{7}|\d{3}-\d{2}-\d{2})$
+    
     static const std::regex re(R"(^(?:\+7|8)(?:812|\(812\))(?:\d{7}|\d{3}-\d{2}-\d{2})$)");
     return std::regex_match(t, re);
 }
@@ -174,6 +172,6 @@ bool validateBirthDate(const std::string& s)
     int ty, tm, td;
     todayYMD(ty, tm, td);
 
-    // строго меньше сегодняшней
+    // date < today date
     return isBefore(y, m, d, ty, tm, td);
 }

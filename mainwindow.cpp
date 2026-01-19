@@ -3,7 +3,7 @@
 
 #include "addeditcontactdialog.h"
 #include "../hpps/service.h"
-#include "../hpps/validation.h"   // <-- ВАЖНО для validatePhone()
+#include "../hpps/validation.h"   //for validatephone
 
 #include <QDialog>
 #include <QTableWidgetItem>
@@ -20,7 +20,7 @@ static QString sanitize(QString s)
     return s.trimmed();
 }
 
-// Разбиваем строку с телефонами по ';'  (можно: "8...; +7...; 8...")
+
 static QStringList splitPhones(QString s)
 {
     s = sanitize(s);
@@ -31,8 +31,7 @@ static QStringList splitPhones(QString s)
     return parts;
 }
 
-// Добавляем в out телефоны заданного типа из строки input.
-// Валидируем каждый номер по validatePhone().
+
 static bool addPhonesOfType(std::vector<PhoneNumber>& out, PhoneType type, const QString& input, std::string& err)
 {
     const QStringList items = splitPhones(input);
@@ -48,7 +47,7 @@ static bool addPhonesOfType(std::vector<PhoneNumber>& out, PhoneType type, const
     return true;
 }
 
-// Возвращаем строку со ВСЕМИ телефонами данного типа, через "; "
+// all phones
 static QString phonesByTypeString(const Contact& c, PhoneType t)
 {
     QStringList items;
@@ -71,7 +70,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lineEdit->setPlaceholderText("Поиск...");
     ui->lineEdit->clear();
 
-    // явные connect
+    //connects
     connect(ui->btnAdd,    &QPushButton::clicked, this, &MainWindow::on_btnAdd_clicked);
     connect(ui->btnEdit,   &QPushButton::clicked, this, &MainWindow::on_btnEdit_clicked);
     connect(ui->btnDelete, &QPushButton::clicked, this, &MainWindow::on_btnDelete_clicked);
@@ -92,7 +91,7 @@ MainWindow::MainWindow(QWidget *parent)
         cfg.port = 5432;
         cfg.dbName = "phonebook";
         cfg.user = "phonebook_user";
-        cfg.password = "Nikorlov08"; // <-- ты вставишь сам
+        cfg.password = "Nikorlov08"; 
 
         service = std::make_unique<ContactService>(cfg);
         refreshTable();
@@ -142,7 +141,7 @@ void MainWindow::refreshTable()
             ui->tableWidget->setItem(row, col, new QTableWidgetItem(v));
         };
 
-        // ПОРЯДОК КОЛОНОК (9 штук, индексы 0..8):
+       
         // 0 Фамилия | 1 Имя | 2 Отчество | 3 Email |
         // 4 Рабочий | 5 Домашний | 6 Служебный |
         // 7 Дата рождения | 8 Адрес
@@ -158,7 +157,7 @@ void MainWindow::refreshTable()
         setItem(7, QString::fromStdString(c.birthday));
         setItem(8, QString::fromStdString(c.address));
 
-        // сохраняем id в UserRole (на первой ячейке строки)
+        // id в UserRole
         ui->tableWidget->item(row, 0)->setData(Qt::UserRole, c.id);
     }
 }
@@ -172,7 +171,7 @@ void MainWindow::on_btnAdd_clicked()
     std::vector<PhoneNumber> phones;
     std::string err;
 
-    // 3 поля, каждое может содержать "в любом количестве" через ';'
+    
     if (!addPhonesOfType(phones, PhoneType::Work,    dlg.phoneWork(), err) ||
         !addPhonesOfType(phones, PhoneType::Home,    dlg.phoneHome(), err) ||
         !addPhonesOfType(phones, PhoneType::Service, dlg.phoneService(), err))
@@ -224,7 +223,7 @@ void MainWindow::on_btnEdit_clicked()
 
     AddEditContactDialog dlg(this);
 
-    // Заполняем диалог из таблицы (строго по индексам колонок)
+    //dialog
     if (auto *w = dlg.findChild<QLineEdit*>("leFirstName"))   w->setText(cellText(row, 1));
     if (auto *w = dlg.findChild<QLineEdit*>("leLastName"))    w->setText(cellText(row, 0));
     if (auto *w = dlg.findChild<QLineEdit*>("leOtch"))        w->setText(cellText(row, 2));

@@ -14,15 +14,15 @@ AddEditContactDialog::AddEditContactDialog(QWidget *parent)
     ui->setupUi(this);
 
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, [this]() {
-        // 1) Нормализуем email по ТЗ: убрать все пробелы
+        // email fix
         QString e = ui->leEmail->text();
         e = e.trimmed();
         e.remove(QRegularExpression("\\s+"));
 
-        // 2) Показываем пользователю уже очищенный email (важно для сохранения без пробелов)
+        // current email
         ui->leEmail->setText(e);
 
-        // 3) Валидируем очищенный email по формату ТЗ
+        // current email fix
         if (!validateEmail(e.toStdString())) {
             QMessageBox::warning(
                 this,
@@ -31,11 +31,10 @@ AddEditContactDialog::AddEditContactDialog(QWidget *parent)
                 "Допустимы только латинские буквы/цифры и один символ '@'.\n"
                 "Пробелы автоматически удаляются."
             );
-            return; // НЕ закрываем диалог
+            return; 
         }
 
-        // 4) Доп. условие: email (часть до '@') должен содержать имя пользователя
-        // ВНИМАНИЕ: это не из формата email, а бизнес-правило (если оно реально требуется преподавателем).
+        // email fix
         QString first = ui->leFirstName->text().trimmed().toLower();
         if (!first.isEmpty()) {
             const QString userPart = e.section('@', 0, 0).toLower(); // часть до '@'
@@ -50,7 +49,7 @@ AddEditContactDialog::AddEditContactDialog(QWidget *parent)
             }
         }
 
-        accept(); // ✅ всё ок
+        accept(); 
     });
 
     connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);

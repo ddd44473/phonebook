@@ -8,7 +8,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-# Qt modules (для PostgreSQL нужен Sql)
+#qt modules
 find_package(Qt5 REQUIRED COMPONENTS Core Widgets Sql)
 
 # ---------------- GUI (Qt) ----------------
@@ -28,7 +28,7 @@ add_executable(PhoneBookQt WIN32
     cpps/service.cpp
     cpps/validation.cpp
 
-    # (необязательно перечислять .h, но можно оставить)
+   
     hpps/postgres_repository.h
 )
 
@@ -38,7 +38,7 @@ target_include_directories(PhoneBookQt PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/cpps
 )
 
-# где искать .ui, если .cpp лежит в /cpps
+
 set_property(TARGET PhoneBookQt PROPERTY AUTOUIC_SEARCH_PATHS
     "${CMAKE_CURRENT_SOURCE_DIR}/cpps"
 )
@@ -50,8 +50,8 @@ add_executable(PhoneBookConsole
     cpps/console_main.cpp
     cpps/contact.cpp
     cpps/file_repository.cpp
-    cpps/postgres_repository.cpp   # <-- ВАЖНО: иначе undefined reference
-    cpps/service.cpp               # service теперь использует PostgresRepository
+    cpps/postgres_repository.cpp   
+    cpps/service.cpp               
     cpps/validation.cpp
 )
 
@@ -61,6 +61,5 @@ target_include_directories(PhoneBookConsole PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/cpps
 )
 
-# file_repository.cpp использует QFile/QTextStream -> нужен Qt5::Core
-# postgres_repository.cpp использует QtSql -> нужен Qt5::Sql
+
 target_link_libraries(PhoneBookConsole PRIVATE Qt5::Core Qt5::Sql)
